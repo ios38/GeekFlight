@@ -8,12 +8,13 @@
 
 import Foundation
 import Alamofire
+import CoreLocation
 import SwiftyJSON
-
+/*
 struct Location {
     var latitude: Float
     var longitude: Float
-}
+}*/
 
 typealias State = (
     icao24: String,
@@ -43,11 +44,11 @@ class NetworkService {
         return session
     }()
     
-    static func getLocation(icao24: String, completion: ((Swift.Result<Location, Error>) -> Void)? = nil) {
-        let baseUrl = "https://opensky-network.org/api/states/all"
+    static func getLocation(icao24: String, completion: ((Swift.Result<CLLocation, Error>) -> Void)? = nil) {
+        let baseUrl = "https://s522es:552253@opensky-network.org/api/states/all"
         
         let params: Parameters = [
-            "icao24": "4248e6"
+            "icao24": "3950c7"
         ]
 
         NetworkService.session.request(baseUrl, method: .get, parameters: params).responseJSON { response in
@@ -56,8 +57,9 @@ class NetworkService {
                 let json = JSON(data)
                 let stateJSON = json["states"][0].arrayValue
                 //print(stateJSON[5], stateJSON[6])
-                let location = Location(latitude: stateJSON[5].floatValue, longitude: stateJSON[6].floatValue)
-                print(location)
+                //let location = Location(latitude: stateJSON[5].floatValue, longitude: stateJSON[6].floatValue)
+                //print(location)
+                let location = CLLocation(latitude: stateJSON[5].doubleValue, longitude: stateJSON[6].doubleValue)
                 completion?(.success(location))
             case let .failure(error):
                 completion?(.failure (error))

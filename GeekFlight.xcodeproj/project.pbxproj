@@ -10,7 +10,7 @@
 		2B7CFAC84902E9740F1CFDD1 /* Pods_GeekFlight_GeekFlightUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D789790DFF88DEAC2DF8FFFC /* Pods_GeekFlight_GeekFlightUITests.framework */; };
 		502E4FA92522099B004756AD /* TrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FA82522099B004756AD /* TrackingService.swift */; };
 		502E4FAB252209E5004756AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAA252209E5004756AD /* NetworkService.swift */; };
-		502E4FAD25220A83004756AD /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAC25220A83004756AD /* Flight.swift */; };
+		506B5AC02523004A00B4499B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B5ABF2523004A00B4499B /* MapView.swift */; };
 		50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1D2522059500A52CAB /* AppDelegate.swift */; };
 		50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1F2522059500A52CAB /* SceneDelegate.swift */; };
 		50E72A222522059500A52CAB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A212522059500A52CAB /* ViewController.swift */; };
@@ -44,7 +44,7 @@
 		4242F634836A7BE75851E23D /* Pods-GeekFlight-GeekFlightUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		502E4FA82522099B004756AD /* TrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingService.swift; sourceTree = "<group>"; };
 		502E4FAA252209E5004756AD /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		502E4FAC25220A83004756AD /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
+		506B5ABF2523004A00B4499B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		50E72A1A2522059500A52CAB /* GeekFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E72A1D2522059500A52CAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50E72A1F2522059500A52CAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 				50E72A2B2522059900A52CAB /* Info.plist */,
 				502E4FAA252209E5004756AD /* NetworkService.swift */,
 				502E4FA82522099B004756AD /* TrackingService.swift */,
-				502E4FAC25220A83004756AD /* Flight.swift */,
+				506B5ABF2523004A00B4499B /* MapView.swift */,
 			);
 			path = GeekFlight;
 			sourceTree = "<group>";
@@ -189,6 +189,7 @@
 				50E72A172522059500A52CAB /* Frameworks */,
 				50E72A182522059500A52CAB /* Resources */,
 				7BE3591FC5BD1B56B315E527 /* [CP] Embed Pods Frameworks */,
+				CD88E3B4C9D53958E12A8647 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -227,6 +228,7 @@
 				50E72A382522059A00A52CAB /* Frameworks */,
 				50E72A392522059A00A52CAB /* Resources */,
 				44F84B5E9F1CC6711DA4EB9E /* [CP] Embed Pods Frameworks */,
+				BC54530F07FE2064B84721A6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -387,6 +389,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeekFlight/Pods-GeekFlight-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BC54530F07FE2064B84721A6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CA7B57099658656B3CD381ED /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,6 +428,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CD88E3B4C9D53958E12A8647 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekFlight/Pods-GeekFlight-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeekFlight/Pods-GeekFlight-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeekFlight/Pods-GeekFlight-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -417,9 +453,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				502E4FAB252209E5004756AD /* NetworkService.swift in Sources */,
+				506B5AC02523004A00B4499B /* MapView.swift in Sources */,
 				502E4FA92522099B004756AD /* TrackingService.swift in Sources */,
 				50E72A222522059500A52CAB /* ViewController.swift in Sources */,
-				502E4FAD25220A83004756AD /* Flight.swift in Sources */,
 				50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */,
 				50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */,
 			);

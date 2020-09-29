@@ -10,6 +10,7 @@ target 'GeekFlight' do
   # pod 'RealmSwift', '= 5.4.2'
   pod 'SnapKit', '~> 5.0.1'
   pod 'SwiftyJSON', '~> 5.0.0'
+  pod 'GoogleMaps', '~> 3.10.0'
 
   target 'GeekFlightTests' do
     inherit! :search_paths
