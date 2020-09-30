@@ -9,60 +9,59 @@
 import UIKit
 import GoogleMaps
 
-class ViewController: UIViewController, GMSMapViewDelegate {
-    var mapView = MapView()
-    var route: GMSPolyline?
-    var routePath: GMSMutablePath?
-    var marker = GMSMarker()
-    let dateFormatter = DateFormatter()
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    var flightsView = FlightsView()
+    var flights = [Flight]()
 
     override func loadView() {
         super.loadView()
-        self.view = mapView
+        self.view = flightsView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.googleMapView?.delegate = self
         
-        configureTrack()
-        addMarker()
-        let trackingService = TrackingService()
-        trackingService.startTrack(icao24: "")
-        
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-    }
+        self.flightsView.tableView.dataSource = self
+        self.flightsView.tableView.delegate = self
 
-    func configureTrack() {
-        route?.map = nil
-        route = GMSPolyline()
-        routePath = GMSMutablePath()
-        route?.strokeColor = .yellow
-        route?.strokeWidth = 3
-        route?.map = mapView.googleMapView
+        NetworkService.getFlights() { result in
+            switch result {
+            case .success(let flights):
+                self.flights = flights
+                self.flightsView.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation(_:)), name: Notification.Name("TrackingServiceDidUpdateLocation"), object: nil)
-        
     }
     
-    func addMarker(){
-        let marker = GMSMarker()
-        marker.map = mapView.googleMapView
-        self.marker = marker
+    //MARK: - UITableViewDelegate
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return flights.count
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "FlightCell")
+        let flight = flights[indexPath.row]
+        cell.textLabel?.text = "\(flight.arrivalAirport) \(flight.date) \(flight.status)"
+        cell.detailTextLabel?.text = "\(flight.latitude)"
+        return cell
+    }
+    
+    //MARK: - UITableViewDelegate
 
-    @objc func didUpdateLocation(_ notification: NSNotification) {
-        guard let location = notification.userInfo?["location"] as? CLLocation else { return }
-        print(location.coordinate)
-        self.marker.position = location.coordinate
-        self.marker.title = "\(dateFormatter.string(from: location.timestamp))"
-        self.marker.snippet = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
-        let cameraPosition = GMSCameraPosition(target: location.coordinate, zoom: 9)
-        self.mapView.googleMapView?.animate(to: cameraPosition)
-        routePath?.add(location.coordinate)
-        route?.path = routePath
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let fligth = flights[indexPath.row]
+        print(fligth.flight_icao)
+        let trackingService = TrackingService()
+        trackingService.startTrack(flight_icao: fligth.flight_icao)
+
+        //let mapController = MapController(flight: fligth)
+        //self.navigationController?.pushViewController(mapController, animated: true)
+
     }
 
 }

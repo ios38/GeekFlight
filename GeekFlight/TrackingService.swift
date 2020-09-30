@@ -11,8 +11,23 @@ import CoreLocation
 
 class TrackingService {
     var timer: Timer?
-    var trackInterval: TimeInterval = 10
+    var trackInterval: TimeInterval = 30
 
+    func startTrack(flight_icao: String) {
+        
+        timer = Timer.scheduledTimer(withTimeInterval: trackInterval, repeats: true, block: { _ in
+            NetworkService.getFlight(flight_icao: flight_icao) { result in
+                switch result {
+                case .success(let flight):
+                    print("\(flight.longitude), \(flight.latitude), \(flight.status)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        })
+    }
+
+    /*
     func startTrack(icao24: String) {
         
         NetworkService.getLocation(icao24: "") { result in
@@ -38,5 +53,5 @@ class TrackingService {
                 }
             }
         })
-    }
+    }*/
 }

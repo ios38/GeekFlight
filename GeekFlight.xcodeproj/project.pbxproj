@@ -10,6 +10,9 @@
 		2B7CFAC84902E9740F1CFDD1 /* Pods_GeekFlight_GeekFlightUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D789790DFF88DEAC2DF8FFFC /* Pods_GeekFlight_GeekFlightUITests.framework */; };
 		502E4FA92522099B004756AD /* TrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FA82522099B004756AD /* TrackingService.swift */; };
 		502E4FAB252209E5004756AD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAA252209E5004756AD /* NetworkService.swift */; };
+		502E4FAF25235C11004756AD /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAE25235C11004756AD /* Flight.swift */; };
+		502E4FB1252361BD004756AD /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FB0252361BD004756AD /* MapController.swift */; };
+		502E4FB325236CD4004756AD /* FlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FB225236CD4004756AD /* FlightsView.swift */; };
 		506B5AC02523004A00B4499B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B5ABF2523004A00B4499B /* MapView.swift */; };
 		50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1D2522059500A52CAB /* AppDelegate.swift */; };
 		50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1F2522059500A52CAB /* SceneDelegate.swift */; };
@@ -44,6 +47,9 @@
 		4242F634836A7BE75851E23D /* Pods-GeekFlight-GeekFlightUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		502E4FA82522099B004756AD /* TrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingService.swift; sourceTree = "<group>"; };
 		502E4FAA252209E5004756AD /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		502E4FAE25235C11004756AD /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
+		502E4FB0252361BD004756AD /* MapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
+		502E4FB225236CD4004756AD /* FlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightsView.swift; sourceTree = "<group>"; };
 		506B5ABF2523004A00B4499B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		50E72A1A2522059500A52CAB /* GeekFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E72A1D2522059500A52CAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +131,7 @@
 				50E72A1D2522059500A52CAB /* AppDelegate.swift */,
 				50E72A1F2522059500A52CAB /* SceneDelegate.swift */,
 				50E72A212522059500A52CAB /* ViewController.swift */,
+				502E4FB0252361BD004756AD /* MapController.swift */,
 				50E72A232522059600A52CAB /* Main.storyboard */,
 				50E72A262522059900A52CAB /* Assets.xcassets */,
 				50E72A282522059900A52CAB /* LaunchScreen.storyboard */,
@@ -132,6 +139,8 @@
 				502E4FAA252209E5004756AD /* NetworkService.swift */,
 				502E4FA82522099B004756AD /* TrackingService.swift */,
 				506B5ABF2523004A00B4499B /* MapView.swift */,
+				502E4FB225236CD4004756AD /* FlightsView.swift */,
+				502E4FAE25235C11004756AD /* Flight.swift */,
 			);
 			path = GeekFlight;
 			sourceTree = "<group>";
@@ -452,12 +461,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				502E4FB1252361BD004756AD /* MapController.swift in Sources */,
 				502E4FAB252209E5004756AD /* NetworkService.swift in Sources */,
 				506B5AC02523004A00B4499B /* MapView.swift in Sources */,
 				502E4FA92522099B004756AD /* TrackingService.swift in Sources */,
 				50E72A222522059500A52CAB /* ViewController.swift in Sources */,
+				502E4FB325236CD4004756AD /* FlightsView.swift in Sources */,
 				50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */,
 				50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */,
+				502E4FAF25235C11004756AD /* Flight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
