@@ -10,12 +10,8 @@ import Foundation
 import Alamofire
 import CoreLocation
 import SwiftyJSON
-/*
-struct Location {
-    var latitude: Float
-    var longitude: Float
-}*/
 
+/*
 typealias State = (
     icao24: String,
     callsign: String,
@@ -34,7 +30,7 @@ typealias State = (
     squawk: String,
     spi: Bool,
     position_source: Int
-)
+)*/
 
 class NetworkService {
     static let session: Alamofire.Session = {
@@ -44,7 +40,99 @@ class NetworkService {
         return session
     }()
     
-    
+    static func getAirports(completion: ((Swift.Result<[Airport], Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150"
+        
+        let params: Parameters = [
+            "appId": "59740609",
+            "appKey": "577eb50e53d9ce436a21087f9ff5a6f7",
+        ]
+
+        NetworkService.session.request(baseUrl, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(result):
+                let json = JSON(result)
+                
+                let airportsJSONs = json["airports"].arrayValue
+                let airports = airportsJSONs.map { Airport(from: $0) }
+                
+                completion?(.success(airports))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
+    static func getFlights(airportFsCode: String, completion: ((Swift.Result<([Airport], [Flight]), Error>) -> Void)? = nil) {
+        
+        let date = Calendar.current.date(byAdding: .hour, value: -3, to: Date())
+        let format = DateFormatter()
+        format.dateFormat = "yyyy/MM/dd/HH"
+        let formattedDate = format.string(from: date!)
+        
+        //https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/status/IKT/dep/2020/10/1/10
+        let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/status/" + airportFsCode + "/dep/" + formattedDate
+        
+        print(baseUrl)
+
+        let params: Parameters = [
+            "appId": "69596f57",
+            "appKey": "be088250b1c219474c79bce179b30b97",
+            "utc": false,
+            "numHours": 6,
+            "maxFlights": 30
+        ]
+
+        NetworkService.session.request(baseUrl, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(result):
+                let json = JSON(result)
+                //print(json)
+                let airportsJSONs = json["appendix"]["airports"].arrayValue
+                let airports = airportsJSONs.map { Airport(from: $0) }
+                
+                let flightsJSONs = json["flightStatuses"].arrayValue
+                let flights = flightsJSONs.map { Flight(from: $0) }
+                
+                completion?(.success((airports, flights)))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
+    static func getTrack(flightId: Int, completion: ((Swift.Result<CLLocation, Error>) -> Void)? = nil) {
+        let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/track/"
+        
+        let params: Parameters = [
+            "appId": "59740609",
+            "appKey": "577eb50e53d9ce436a21087f9ff5a6f7",
+            "includeFlightPlan": false,
+            "maxPositions": 1
+        ]
+
+        NetworkService.session.request(baseUrl + "\(flightId)", method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case let .success(result):
+                let json = JSON(result)
+                let positionsJSONs = json["flightTrack"]["positions"].arrayValue
+                //print(positionsJSONs)
+                let positions = positionsJSONs.map { Position(from: $0) }
+                
+                guard let position = positions.first else { return }
+                let location = CLLocation(
+                    latitude: position.latitude,
+                    longitude: position.longitude
+                )
+
+                completion?(.success(location))
+            case let .failure(error):
+                completion?(.failure (error))
+            }
+        }
+    }
+
+    /*
     static func getFlights(completion: ((Swift.Result<[Flight], Error>) -> Void)? = nil) {
         let baseUrl = "http://api.aviationstack.com/v1/flights"
         
@@ -116,5 +204,5 @@ class NetworkService {
                 completion?(.failure (error))
             }
         }
-    }
+    }*/
 }

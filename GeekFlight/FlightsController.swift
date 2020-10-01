@@ -9,10 +9,19 @@
 import UIKit
 import GoogleMaps
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FlightsController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    let navigationItemTitle = "Вылет"
+    var airportFsCode = ""
     var flightsView = FlightsView()
     var flights = [Flight]()
+    var airports = [Airport]()
+    lazy var trackingService = TrackingService()
 
+    deinit {
+        trackingService.stopTrack()
+        print("FlightsController deinitialized")
+    }
+    
     override func loadView() {
         super.loadView()
         self.view = flightsView
@@ -20,14 +29,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationItem.title = navigationItemTitle
         self.flightsView.tableView.dataSource = self
         self.flightsView.tableView.delegate = self
 
-        NetworkService.getFlights() { result in
+        NetworkService.getFlights(airportFsCode: airportFsCode) { result in
             switch result {
-            case .success(let flights):
-                self.flights = flights
+            case .success(let (airports, flights)):
+                self.airports = (airports, flights).0
+                self.flights = (airports, flights).1
                 self.flightsView.tableView.reloadData()
             case .failure(let error):
                 print(error.localizedDescription)
@@ -43,21 +53,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: "FlightCell")
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "FlightCell")
         let flight = flights[indexPath.row]
-        cell.textLabel?.text = "\(flight.arrivalAirport) \(flight.date) \(flight.status)"
-        cell.detailTextLabel?.text = "\(flight.latitude)"
+        let airport = airports.first { $0.airportFsCode == flight.arrivalAirportFsCode }
+        cell.textLabel?.text = "\(airport?.city ?? "") \(flight.arrivalAirportFsCode)"
+        cell.detailTextLabel?.text = "\(flight.departureDateLocal) Status: \(flight.status)"
         return cell
     }
     
     //MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        trackingService.stopTrack()
         tableView.deselectRow(at: indexPath, animated: true)
         let fligth = flights[indexPath.row]
-        print(fligth.flight_icao)
-        let trackingService = TrackingService()
-        trackingService.startTrack(flight_icao: fligth.flight_icao)
+        trackingService.startTrack(flightId: fligth.flightId)
 
         //let mapController = MapController(flight: fligth)
         //self.navigationController?.pushViewController(mapController, animated: true)

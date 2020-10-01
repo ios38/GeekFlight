@@ -8,10 +8,23 @@
 
 import Foundation
 import SwiftyJSON
-import CoreLocation
+//import CoreLocation
 
 class Flight: Decodable {
+    var flightId: Int
+    var arrivalAirportFsCode: String
+    var departureDateLocal: String
+    var status: String
     
+    init(from json: JSON) {
+        flightId = json["flightId"].intValue
+        arrivalAirportFsCode = json["arrivalAirportFsCode"].stringValue
+        departureDateLocal = json["departureDate"]["dateLocal"].stringValue
+        status = json["status"].stringValue
+    }
+    
+    //aviationstack.com
+    /*
     var date: String
     var status: String
     var departureAirport: String
@@ -38,5 +51,5 @@ class Flight: Decodable {
         flight_icao = json["flight"]["icao"].stringValue
         latitude = json["live"]["latitude"].doubleValue
         longitude = json["live"]["longitude"].doubleValue
-    }
+    }*/
 }

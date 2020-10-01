@@ -11,8 +11,35 @@ import CoreLocation
 
 class TrackingService {
     var timer: Timer?
-    var trackInterval: TimeInterval = 30
+    var trackInterval: TimeInterval = 60
 
+    //flightstats.com
+    func startTrack(flightId: Int) {
+        //first position
+        getTrack(flightId: flightId)
+        //following positions
+        timer = Timer.scheduledTimer(withTimeInterval: trackInterval, repeats: true, block: { _ in
+            self.getTrack(flightId: flightId)
+        })
+    }
+    
+    private func getTrack(flightId: Int) {
+        NetworkService.getTrack(flightId: flightId) { result in
+            switch result {
+            case .success(let location):
+                print("\(flightId): \(location.coordinate.latitude), \(location.coordinate.longitude)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func stopTrack() {
+        guard let timer = timer else { return }
+        timer.invalidate()
+    }
+    
+    /* //aviationstack.com
     func startTrack(flight_icao: String) {
         
         timer = Timer.scheduledTimer(withTimeInterval: trackInterval, repeats: true, block: { _ in
@@ -25,9 +52,9 @@ class TrackingService {
                 }
             }
         })
-    }
+    }*/
 
-    /*
+    /* //opensky-network.org
     func startTrack(icao24: String) {
         
         NetworkService.getLocation(icao24: "") { result in
