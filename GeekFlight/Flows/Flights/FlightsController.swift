@@ -10,18 +10,13 @@ import UIKit
 import GoogleMaps
 
 class FlightsController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    let navigationItemTitle = "Вылет"
+    let navigationItemTitle = "Рейсы"
     var airportFsCode = ""
     var flightsView = FlightsView()
     var flights = [Flight]()
     var airports = [Airport]()
     lazy var trackingService = TrackingService()
 
-    deinit {
-        trackingService.stopTrack()
-        print("FlightsController deinitialized")
-    }
-    
     override func loadView() {
         super.loadView()
         self.view = flightsView
@@ -64,13 +59,11 @@ class FlightsController: UIViewController, UITableViewDataSource, UITableViewDel
     //MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        trackingService.stopTrack()
+        //trackingService.stopTrack()
         tableView.deselectRow(at: indexPath, animated: true)
-        let fligth = flights[indexPath.row]
-        trackingService.startTrack(flightId: fligth.flightId)
-
-        //let mapController = MapController(flight: fligth)
-        //self.navigationController?.pushViewController(mapController, animated: true)
+        let flight = flights[indexPath.row]
+        let mapController = MapController(flight: flight)
+        self.navigationController?.pushViewController(mapController, animated: true)
 
     }
 

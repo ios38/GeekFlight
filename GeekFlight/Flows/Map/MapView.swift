@@ -12,11 +12,14 @@ import SnapKit
 
 class MapView: UIView {
     var googleMapView: GMSMapView?
-    let coordinate = CLLocationCoordinate2D(latitude: 52.287521, longitude: 104.287223)
+    //let coordinate = CLLocationCoordinate2D(latitude: 52.287521, longitude: 104.287223) //Иркутск
+    let coordinate = CLLocationCoordinate2D(latitude: 30.270505, longitude: 59.799847) //Питер
 
     var startButton = UIButton(type: .system)
     var stopButton = UIButton(type: .system)
-        
+    
+    var zoomLabel = UILabel()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureSubviews()
@@ -28,12 +31,15 @@ class MapView: UIView {
     }
 
     func configureSubviews() {
-        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 15)
+        let camera = GMSCameraPosition.camera(withTarget: coordinate, zoom: 8)
         googleMapView = GMSMapView.map(withFrame: self.frame, camera: camera)
         googleMapView?.mapType = .hybrid
         googleMapView?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.googleMapView!)
         
+        zoomLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(zoomLabel)
+
         startButton.translatesAutoresizingMaskIntoConstraints = false
         startButton.setTitle("Start Track", for: .normal)
         startButton.setTitleColor(.white, for: .normal)
@@ -61,6 +67,12 @@ class MapView: UIView {
             make.size.equalToSuperview()
         }
         
+        zoomLabel.snp.makeConstraints { make in
+            make.width.equalTo(100)
+            make.top.equalToSuperview().offset(80)
+            make.left.equalToSuperview().offset(15)
+        }
+
         startButton.snp.makeConstraints { make in
             make.width.equalTo(100)
             make.bottom.equalToSuperview().inset(15)

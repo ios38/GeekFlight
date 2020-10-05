@@ -11,27 +11,6 @@ import Alamofire
 import CoreLocation
 import SwiftyJSON
 
-/*
-typealias State = (
-    icao24: String,
-    callsign: String,
-    origin_country: String,
-    time_position: Int,
-    last_contact: Int,
-    longitude: Float,
-    latitude: Float,
-    baro_altitude: Float,
-    on_ground: Bool,
-    velocity: Float,
-    true_track: Float,
-    vertical_rate: Float,
-    sensors: Bool,
-    geo_altitude: Float,
-    squawk: String,
-    spi: Bool,
-    position_source: Int
-)*/
-
 class NetworkService {
     static let session: Alamofire.Session = {
         let config = URLSessionConfiguration.default
@@ -41,8 +20,9 @@ class NetworkService {
     }()
     
     static func getAirports(completion: ((Swift.Result<[Airport], Error>) -> Void)? = nil) {
-        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150"
-        
+        //let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150" //Иркутск
+        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/30.270505/59.799847/100" //Питер
+
         let params: Parameters = [
             "appId": "59740609",
             "appKey": "577eb50e53d9ce436a21087f9ff5a6f7",
@@ -65,22 +45,20 @@ class NetworkService {
 
     static func getFlights(airportFsCode: String, completion: ((Swift.Result<([Airport], [Flight]), Error>) -> Void)? = nil) {
         
-        let date = Calendar.current.date(byAdding: .hour, value: -3, to: Date())
+        let date = Calendar.current.date(byAdding: .hour, value: -6, to: Date())
         let format = DateFormatter()
         format.dateFormat = "yyyy/MM/dd/HH"
         let formattedDate = format.string(from: date!)
         
         //https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/status/IKT/dep/2020/10/1/10
         let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/status/" + airportFsCode + "/dep/" + formattedDate
-        
-        print(baseUrl)
 
         let params: Parameters = [
             "appId": "69596f57",
             "appKey": "be088250b1c219474c79bce179b30b97",
             "utc": false,
             "numHours": 6,
-            "maxFlights": 30
+            "maxFlights": 50
         ]
 
         NetworkService.session.request(baseUrl, method: .get, parameters: params).responseJSON { response in
@@ -101,7 +79,7 @@ class NetworkService {
         }
     }
 
-    static func getTrack(flightId: Int, completion: ((Swift.Result<CLLocation, Error>) -> Void)? = nil) {
+    static func getTrack(flightId: Int, completion: ((Swift.Result<[String: CLLocation], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/track/"
         
         let params: Parameters = [
@@ -115,22 +93,45 @@ class NetworkService {
             switch response.result {
             case let .success(result):
                 let json = JSON(result)
+                var dict: [String: CLLocation] = [:]
+                
                 let positionsJSONs = json["flightTrack"]["positions"].arrayValue
                 //print(positionsJSONs)
                 let positions = positionsJSONs.map { Position(from: $0) }
-                
                 guard let position = positions.first else { return }
                 let location = CLLocation(
                     latitude: position.latitude,
                     longitude: position.longitude
                 )
 
-                completion?(.success(location))
+                dict = ["flightLocation": location]
+                completion?(.success(dict))
             case let .failure(error):
                 completion?(.failure (error))
             }
         }
     }
+    
+    /*
+    typealias State = (
+        icao24: String,
+        callsign: String,
+        origin_country: String,
+        time_position: Int,
+        last_contact: Int,
+        longitude: Float,
+        latitude: Float,
+        baro_altitude: Float,
+        on_ground: Bool,
+        velocity: Float,
+        true_track: Float,
+        vertical_rate: Float,
+        sensors: Bool,
+        geo_altitude: Float,
+        squawk: String,
+        spi: Bool,
+        position_source: Int
+    )*/
 
     /*
     static func getFlights(completion: ((Swift.Result<[Flight], Error>) -> Void)? = nil) {

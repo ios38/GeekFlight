@@ -26,8 +26,10 @@ class TrackingService {
     private func getTrack(flightId: Int) {
         NetworkService.getTrack(flightId: flightId) { result in
             switch result {
-            case .success(let location):
-                print("\(flightId): \(location.coordinate.latitude), \(location.coordinate.longitude)")
+            case .success(let locations):
+                print("\(flightId): \(locations["flightLocation"]!.coordinate.latitude), \(locations["flightLocation"]!.coordinate.longitude)")
+                //let locationDict:[String: CLLocation] = ["location": location]
+                NotificationCenter.default.post(name: NSNotification.Name("TrackingServiceDidUpdateLocation"), object: nil, userInfo: locations)
             case .failure(let error):
                 print(error.localizedDescription)
             }
