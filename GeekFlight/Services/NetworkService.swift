@@ -95,7 +95,7 @@ class NetworkService {
                 let json = JSON(result)
                 
                 let positionsJSONs = json["flightTrack"]["positions"].arrayValue
-                print(positionsJSONs)
+                //print(positionsJSONs)
                 
                 let locations = positionsJSONs.map { position -> CLLocation in
                         let location = CLLocation(
