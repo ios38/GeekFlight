@@ -79,32 +79,32 @@ class NetworkService {
         }
     }
 
-    static func getTrack(flightId: Int, completion: ((Swift.Result<[String: CLLocation], Error>) -> Void)? = nil) {
+    static func getTrack(flightId: Int, completion: ((Swift.Result<[String: [CLLocation]], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/track/"
         
         let params: Parameters = [
             "appId": "59740609",
             "appKey": "577eb50e53d9ce436a21087f9ff5a6f7",
             "includeFlightPlan": false,
-            "maxPositions": 1
+            "maxPositions": 2
         ]
 
         NetworkService.session.request(baseUrl + "\(flightId)", method: .get, parameters: params).responseJSON { response in
             switch response.result {
             case let .success(result):
                 let json = JSON(result)
-                var dict: [String: CLLocation] = [:]
                 
                 let positionsJSONs = json["flightTrack"]["positions"].arrayValue
-                //print(positionsJSONs)
-                let positions = positionsJSONs.map { Position(from: $0) }
-                guard let position = positions.first else { return }
-                let location = CLLocation(
-                    latitude: position.latitude,
-                    longitude: position.longitude
-                )
-
-                dict = ["flightLocation": location]
+                print(positionsJSONs)
+                
+                let locations = positionsJSONs.map { position -> CLLocation in
+                        let location = CLLocation(
+                        latitude: position["lat"].doubleValue,
+                        longitude: position["lon"].doubleValue)
+                        return location
+                }
+                
+                let dict = ["flightLocations": locations]
                 completion?(.success(dict))
             case let .failure(error):
                 completion?(.failure (error))

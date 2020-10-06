@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2B7CFAC84902E9740F1CFDD1 /* Pods_GeekFlight_GeekFlightUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D789790DFF88DEAC2DF8FFFC /* Pods_GeekFlight_GeekFlightUITests.framework */; };
 		5008C36F252585DE00AA94F0 /* Airport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5008C36E252585DE00AA94F0 /* Airport.swift */; };
-		5008C3712525976100AA94F0 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5008C3702525976100AA94F0 /* Position.swift */; };
 		5008C3742525B62D00AA94F0 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5008C3732525B62D00AA94F0 /* LocationService.swift */; };
 		5008C3762525B6D400AA94F0 /* AirportsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5008C3752525B6D400AA94F0 /* AirportsController.swift */; };
 		5008C37A2525B7F000AA94F0 /* AirportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5008C3792525B7F000AA94F0 /* AirportsView.swift */; };
@@ -50,7 +49,6 @@
 /* Begin PBXFileReference section */
 		4242F634836A7BE75851E23D /* Pods-GeekFlight-GeekFlightUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeekFlight-GeekFlightUITests/Pods-GeekFlight-GeekFlightUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5008C36E252585DE00AA94F0 /* Airport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airport.swift; sourceTree = "<group>"; };
-		5008C3702525976100AA94F0 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		5008C3732525B62D00AA94F0 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		5008C3752525B6D400AA94F0 /* AirportsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportsController.swift; sourceTree = "<group>"; };
 		5008C3792525B7F000AA94F0 /* AirportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportsView.swift; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 			children = (
 				502E4FAE25235C11004756AD /* Flight.swift */,
 				5008C36E252585DE00AA94F0 /* Airport.swift */,
-				5008C3702525976100AA94F0 /* Position.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -540,7 +537,6 @@
 				5008C3762525B6D400AA94F0 /* AirportsController.swift in Sources */,
 				50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */,
 				50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */,
-				5008C3712525976100AA94F0 /* Position.swift in Sources */,
 				502E4FAF25235C11004756AD /* Flight.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

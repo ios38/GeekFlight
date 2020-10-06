@@ -12,12 +12,13 @@ import GoogleMaps
 class MapController: UIViewController, GMSMapViewDelegate {
     var mapView = MapView()
     var flight: Flight
-    var route: GMSPolyline?
-    var routePath: GMSMutablePath?
+    var polyline: GMSPolyline?
+    var path: GMSMutablePath?
     var marker = GMSMarker()
     let dateFormatter = DateFormatter()
     let trackingService = TrackingService()
     var zoom: Float = 8
+    var pathAnimationTimer: Timer!
 
     internal init(flight: Flight) {
         self.flight = flight
@@ -30,6 +31,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
     
     deinit {
         trackingService.stopTrack()
+        pathAnimationTimer.invalidate()
         print("MapController deinitialized")
     }
     
@@ -54,15 +56,14 @@ class MapController: UIViewController, GMSMapViewDelegate {
     }
 
     func configureTrack() {
-        route?.map = nil
-        route = GMSPolyline()
-        routePath = GMSMutablePath()
-        route?.strokeColor = .yellow
-        route?.strokeWidth = 3
-        route?.map = mapView.googleMapView
+        polyline?.map = nil
+        polyline = GMSPolyline()
+        path = GMSMutablePath()
+        polyline?.strokeColor = .yellow
+        polyline?.strokeWidth = 3
+        polyline?.map = mapView.googleMapView
 
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation(_:)), name: Notification.Name("TrackingServiceDidUpdateLocation"), object: nil)
-        
     }
     
     func addMarker(){
@@ -72,17 +73,60 @@ class MapController: UIViewController, GMSMapViewDelegate {
     }
 
     @objc func didUpdateLocation(_ notification: NSNotification) {
-        guard let location = notification.userInfo?["flightLocation"] as? CLLocation else { return }
-        //print(location.coordinate)
-        self.marker.position = location.coordinate
-        self.marker.title = "\(dateFormatter.string(from: location.timestamp))"
-        self.marker.snippet = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
-        let cameraPosition = GMSCameraPosition(target: location.coordinate, zoom: zoom)
+        guard let locations = notification.userInfo?["flightLocations"] as? [CLLocation],
+              let from = locations.last?.coordinate,
+              let to = locations.first?.coordinate
+        else { return }
+        print("from: \(from) to \(to)")
+        self.marker.position = from
+        //self.marker.title = "\(dateFormatter.string(from: location.timestamp))"
+        //self.marker.snippet = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
+        let cameraPosition = GMSCameraPosition(target: from, zoom: zoom)
         self.mapView.googleMapView?.animate(to: cameraPosition)
-        routePath?.add(location.coordinate)
-        route?.path = routePath
+        self.animatePath(path: self.makePath(from: from, to: to, count: 300))
     }
     
+    func animatePath(path: GMSMutablePath) {
+        if pathAnimationTimer != nil {
+            pathAnimationTimer.invalidate()
+        }
+        var index: UInt = 0
+        let count = path.count() - 1
+        let timeInterval: TimeInterval = 60.0 / Double(path.count())
+        
+        self.path?.add(path.coordinate(at: index))
+        self.polyline?.path = self.path
+        pathAnimationTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] timer in
+            index += 1
+            if index <= count {
+                self?.path?.add(path.coordinate(at: index))
+                //print("\(index): \(path.coordinate(at: index))")
+                self?.polyline?.path = self?.path
+            } else {
+                timer.invalidate()
+            }
+        }
+    }
+    
+    func makePath(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, count: Int) -> GMSMutablePath {
+        let path = GMSMutablePath()
+        path.add(from)
+        
+        let latitudeDelta = (to.latitude - from.latitude) / Double(count)
+        let longitudeDelta = (to.longitude - from.longitude) / Double(count)
+        
+        var latitude = from.latitude
+        var longitude = from.longitude
+        
+        for i in 1..<count {
+            latitude += latitudeDelta
+            longitude += longitudeDelta
+            print("\(i): \(latitude), \(longitude)")
+            path.add(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+        }
+        return path
+    }
+
     //MARK: - GMSMapViewDelegate
 
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {

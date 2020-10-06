@@ -62,6 +62,7 @@ class FlightsController: UIViewController, UITableViewDataSource, UITableViewDel
         //trackingService.stopTrack()
         tableView.deselectRow(at: indexPath, animated: true)
         let flight = flights[indexPath.row]
+        print("did select flightId \(flight.flightId)")
         let mapController = MapController(flight: flight)
         self.navigationController?.pushViewController(mapController, animated: true)
 
