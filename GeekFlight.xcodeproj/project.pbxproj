@@ -18,6 +18,7 @@
 		502E4FAF25235C11004756AD /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAE25235C11004756AD /* Flight.swift */; };
 		502E4FB325236CD4004756AD /* FlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FB225236CD4004756AD /* FlightsView.swift */; };
 		506B5AC02523004A00B4499B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B5ABF2523004A00B4499B /* MapView.swift */; };
+		50BDC7AE252C509600D488A7 /* MarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BDC7AD252C509600D488A7 /* MarkerView.swift */; };
 		50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1D2522059500A52CAB /* AppDelegate.swift */; };
 		50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1F2522059500A52CAB /* SceneDelegate.swift */; };
 		50E72A222522059500A52CAB /* FlightsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A212522059500A52CAB /* FlightsController.swift */; };
@@ -58,6 +59,7 @@
 		502E4FAE25235C11004756AD /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
 		502E4FB225236CD4004756AD /* FlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightsView.swift; sourceTree = "<group>"; };
 		506B5ABF2523004A00B4499B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		50BDC7AD252C509600D488A7 /* MarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerView.swift; sourceTree = "<group>"; };
 		50E72A1A2522059500A52CAB /* GeekFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E72A1D2522059500A52CAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50E72A1F2522059500A52CAB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 		5008C3802526203C00AA94F0 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				50BDC7AD252C509600D488A7 /* MarkerView.swift */,
 				506B5ABF2523004A00B4499B /* MapView.swift */,
 				5008C37B25260B4F00AA94F0 /* MapController.swift */,
 			);
@@ -533,6 +536,7 @@
 				50E72A222522059500A52CAB /* FlightsController.swift in Sources */,
 				502E4FB325236CD4004756AD /* FlightsView.swift in Sources */,
 				5008C3742525B62D00AA94F0 /* LocationService.swift in Sources */,
+				50BDC7AE252C509600D488A7 /* MarkerView.swift in Sources */,
 				5008C37C25260B4F00AA94F0 /* MapController.swift in Sources */,
 				5008C3762525B6D400AA94F0 /* AirportsController.swift in Sources */,
 				50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */,

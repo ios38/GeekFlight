@@ -43,11 +43,10 @@ class MapController: UIViewController, GMSMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.googleMapView?.delegate = self
-        
         mapView.zoomLabel.text = "Zoom: \(zoom)"
         
         configureTrack()
-        addMarker()
+        configureMarker()
         trackingService.startTrack(flightId: flight.flightId)
 
         dateFormatter.dateStyle = .short
@@ -66,8 +65,10 @@ class MapController: UIViewController, GMSMapViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation(_:)), name: Notification.Name("TrackingServiceDidUpdateLocation"), object: nil)
     }
     
-    func addMarker(){
+    func configureMarker(){
         let marker = GMSMarker()
+        marker.iconView = MarkerView()
+
         marker.map = mapView.googleMapView
         self.marker = marker
     }

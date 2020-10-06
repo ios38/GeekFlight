@@ -38,6 +38,7 @@ class MapView: UIView {
         self.addSubview(self.googleMapView!)
         
         zoomLabel.translatesAutoresizingMaskIntoConstraints = false
+        zoomLabel.isHidden = true
         self.addSubview(zoomLabel)
 
         startButton.translatesAutoresizingMaskIntoConstraints = false
