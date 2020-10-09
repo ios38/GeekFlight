@@ -7,15 +7,22 @@
 //
 
 import Foundation
+import CoreLocation
 import SwiftyJSON
 
 class Airport: Decodable {
     var airportFsCode: String
+    var coordinate: Coordinate
     var name: String
     var city: String
     
     init(from json: JSON) {
         airportFsCode = json["fs"].stringValue
+
+        let latitude = json["latitude"].doubleValue
+        let longitude = json["longitude"].doubleValue
+        coordinate = Coordinate(latitude: latitude, longitude: longitude)
+
         name = json["name"].stringValue
         city = json["city"].stringValue
     }

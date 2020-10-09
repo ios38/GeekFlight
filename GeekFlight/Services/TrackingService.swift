@@ -16,15 +16,15 @@ class TrackingService {
     //flightstats.com
     func startTrack(flightId: Int) {
         //first position
-        getTrack(flightId: flightId)
+        //getTrack(flightId: flightId, count: 100)
         //following positions
         timer = Timer.scheduledTimer(withTimeInterval: trackInterval, repeats: true, block: { _ in
-            self.getTrack(flightId: flightId)
+            self.getTrack(flightId: flightId, count: 2)
         })
     }
     
-    private func getTrack(flightId: Int) {
-        NetworkService.getTrack(flightId: flightId) { result in
+    private func getTrack(flightId: Int, count: Int) {
+        NetworkService.getTrack(flightId: flightId, count: count) { result in
             switch result {
             case .success(let locations):
                 //print("\(flightId): \(locations["flightLocation"]!.coordinate.latitude), \(locations["flightLocation"]!.coordinate.longitude)")

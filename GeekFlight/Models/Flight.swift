@@ -12,14 +12,23 @@ import SwiftyJSON
 
 class Flight: Decodable {
     var flightId: Int
+    var departureAirportFsCode: String
+    var departureAirportCoordinate: Coordinate?
     var arrivalAirportFsCode: String
-    var departureDateLocal: String
+    var arrivalAirportCoordinate: Coordinate?
+    var departureDateLocal: Date
     var status: String
     
     init(from json: JSON) {
         flightId = json["flightId"].intValue
+        departureAirportFsCode = json["departureAirportFsCode"].stringValue
         arrivalAirportFsCode = json["arrivalAirportFsCode"].stringValue
-        departureDateLocal = json["departureDate"]["dateLocal"].stringValue
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" //"2020-10-01T01:35:00.000Z"
+        let dateString = json["departureDate"]["dateLocal"].stringValue
+        departureDateLocal = formatter.date(from: dateString) ?? Date()
+
         status = json["status"].stringValue
     }
     

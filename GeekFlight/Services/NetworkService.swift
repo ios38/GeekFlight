@@ -20,8 +20,8 @@ class NetworkService {
     }()
     
     static func getAirports(completion: ((Swift.Result<[Airport], Error>) -> Void)? = nil) {
-        //let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150" //Иркутск
-        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/30.270505/59.799847/100" //Питер
+        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150" //Иркутск
+        //let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/30.270505/59.799847/100" //Питер
 
         let params: Parameters = [
             "appId": "59740609",
@@ -72,6 +72,11 @@ class NetworkService {
                 let flightsJSONs = json["flightStatuses"].arrayValue
                 let flights = flightsJSONs.map { Flight(from: $0) }
                 
+                flights.forEach { flight in
+                    flight.departureAirportCoordinate = airports.first(where: { $0.airportFsCode == flight.departureAirportFsCode })!.coordinate
+                    flight.arrivalAirportCoordinate = airports.first(where: { $0.airportFsCode == flight.arrivalAirportFsCode })!.coordinate
+                }
+                
                 completion?(.success((airports, flights)))
             case let .failure(error):
                 completion?(.failure (error))
@@ -79,24 +84,23 @@ class NetworkService {
         }
     }
 
-    static func getTrack(flightId: Int, completion: ((Swift.Result<[String: [CLLocation]], Error>) -> Void)? = nil) {
+    static func getTrack(flightId: Int, count: Int, completion: ((Swift.Result<[String: [CLLocation]], Error>) -> Void)? = nil) {
         let baseUrl = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/track/"
         
         let params: Parameters = [
             "appId": "59740609",
             "appKey": "577eb50e53d9ce436a21087f9ff5a6f7",
             "includeFlightPlan": false,
-            "maxPositions": 2
+            "maxPositions": count
         ]
 
         NetworkService.session.request(baseUrl + "\(flightId)", method: .get, parameters: params).responseJSON { response in
             switch response.result {
             case let .success(result):
                 let json = JSON(result)
-                
+                //print(json)
                 let positionsJSONs = json["flightTrack"]["positions"].arrayValue
                 //print(positionsJSONs)
-                
                 let locations = positionsJSONs.map { position -> CLLocation in
                         let location = CLLocation(
                         latitude: position["lat"].doubleValue,

@@ -18,6 +18,7 @@
 		502E4FAF25235C11004756AD /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FAE25235C11004756AD /* Flight.swift */; };
 		502E4FB325236CD4004756AD /* FlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E4FB225236CD4004756AD /* FlightsView.swift */; };
 		506B5AC02523004A00B4499B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B5ABF2523004A00B4499B /* MapView.swift */; };
+		5073F5D7252DF7B200CF1C67 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5073F5D6252DF7B200CF1C67 /* Coordinate.swift */; };
 		50BDC7AE252C509600D488A7 /* MarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BDC7AD252C509600D488A7 /* MarkerView.swift */; };
 		50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1D2522059500A52CAB /* AppDelegate.swift */; };
 		50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E72A1F2522059500A52CAB /* SceneDelegate.swift */; };
@@ -59,6 +60,7 @@
 		502E4FAE25235C11004756AD /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
 		502E4FB225236CD4004756AD /* FlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightsView.swift; sourceTree = "<group>"; };
 		506B5ABF2523004A00B4499B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		5073F5D6252DF7B200CF1C67 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		50BDC7AD252C509600D488A7 /* MarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerView.swift; sourceTree = "<group>"; };
 		50E72A1A2522059500A52CAB /* GeekFlight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekFlight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E72A1D2522059500A52CAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			children = (
 				502E4FAE25235C11004756AD /* Flight.swift */,
 				5008C36E252585DE00AA94F0 /* Airport.swift */,
+				5073F5D6252DF7B200CF1C67 /* Coordinate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				50E72A1E2522059500A52CAB /* AppDelegate.swift in Sources */,
 				50E72A202522059500A52CAB /* SceneDelegate.swift in Sources */,
 				502E4FAF25235C11004756AD /* Flight.swift in Sources */,
+				5073F5D7252DF7B200CF1C67 /* Coordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

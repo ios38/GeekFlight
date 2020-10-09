@@ -51,8 +51,10 @@ class FlightsController: UIViewController, UITableViewDataSource, UITableViewDel
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "FlightCell")
         let flight = flights[indexPath.row]
         let airport = airports.first { $0.airportFsCode == flight.arrivalAirportFsCode }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yy HH:mm"
         cell.textLabel?.text = "\(airport?.city ?? "") \(flight.arrivalAirportFsCode)"
-        cell.detailTextLabel?.text = "\(flight.departureDateLocal) Status: \(flight.status)"
+        cell.detailTextLabel?.text = "\(formatter.string(from: flight.departureDateLocal)) Status: \(flight.status)"
         return cell
     }
     
@@ -62,7 +64,9 @@ class FlightsController: UIViewController, UITableViewDataSource, UITableViewDel
         //trackingService.stopTrack()
         tableView.deselectRow(at: indexPath, animated: true)
         let flight = flights[indexPath.row]
-        print("did select flightId \(flight.flightId)")
+        //print("did select flightId \(flight.flightId)")
+        //print("departureAirportCoordinate \(flight.departureAirportCoordinate)")
+        //print("arrivalAirportCoordinate \(flight.arrivalAirportCoordinate)")
         let mapController = MapController(flight: flight)
         self.navigationController?.pushViewController(mapController, animated: true)
 
