@@ -15,7 +15,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
     var polylineBehind: GMSPolyline?
     var polylineAhead: GMSPolyline?
     var pathBehind: GMSMutablePath?
-    var marker = GMSMarker()
+    var flightMarker = GMSMarker()
     let dateFormatter = DateFormatter()
     let trackingService = TrackingService()
     var zoom: Float = 8
@@ -57,6 +57,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
         configureMarker()
 
         getEarlyTrack()
+        //getEarlyTrackSimple()
         //trackingService.startTrack(flightId: flight.flightId)
     }
 
@@ -67,28 +68,44 @@ class MapController: UIViewController, GMSMapViewDelegate {
         polylineBehind = GMSPolyline()
         polylineBehind?.strokeColor = .green
         polylineBehind?.strokeWidth = 2
-        polylineBehind?.geodesic = true //???
+        polylineBehind?.geodesic = true
         polylineBehind?.map = mapView.googleMapView
 
         polylineAhead?.map = nil
         polylineAhead = GMSPolyline()
         polylineAhead?.strokeColor = .yellow
         polylineAhead?.strokeWidth = 1
-        polylineAhead?.geodesic = true //???
+        polylineAhead?.geodesic = true
         polylineAhead?.map = mapView.googleMapView
 
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateLocation(_:)), name: Notification.Name("TrackingServiceDidUpdateLocation"), object: nil)
     }
     
     func configureMarker(){
+        let departureMarker = GMSMarker()
+        departureMarker.title = "\(flight.departureAirportFsCode)"
+        //departureMarker.snippet = "\(flight.departureAirportFsCode)"
+        if let departureCoordinate = flight.departureAirportCoordinate?.locationCoordinate() {
+            departureMarker.position = departureCoordinate
+            departureMarker.map = mapView.googleMapView
+        }
+        
+        let arrivalMarker = GMSMarker()
+        arrivalMarker.title = "\(flight.arrivalAirportFsCode)"
+        //arrivalMarker.snippet = "\(flight.arrivalAirportFsCode)"
+        if let arrivalCoordinate = flight.arrivalAirportCoordinate?.locationCoordinate() {
+            arrivalMarker.position = arrivalCoordinate
+            arrivalMarker.map = mapView.googleMapView
+        }
+
         let marker = GMSMarker()
         marker.iconView = MarkerView()
         marker.groundAnchor = CGPoint(x: CGFloat(0.5), y: CGFloat(0.5))
         marker.map = mapView.googleMapView
-        self.marker = marker
+        self.flightMarker = marker
     }
     
-    func getEarlyTrack() {
+    func getEarlyTrackSimple() {
         NetworkService.getTrack(flightId: flight.flightId, count: 2) { result in
             switch result {
             case .success(let locations):
@@ -102,7 +119,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
                 self.pathBehind?.add(departureCoordinate)
                 self.pathBehind?.add(from)
                 self.markerRotation = rotation + 90
-                self.marker.rotation = self.markerRotation
+                self.flightMarker.rotation = self.markerRotation
                 let cameraPosition = GMSCameraPosition(target: from, zoom: self.zoom)
                 self.mapView.googleMapView?.animate(to: cameraPosition)
                 self.animatePath(from: from, to: to)
@@ -113,7 +130,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
         }
     }
 
-    /*
+    
     func getEarlyTrack() { //get multipositions early track
         NetworkService.getTrack(flightId: flight.flightId, count: 600) { result in
             switch result {
@@ -121,32 +138,43 @@ class MapController: UIViewController, GMSMapViewDelegate {
                 guard var locations = locations["flightLocations"],
                           locations.count >= 2
                 else { return }
+                
+                let formatter = DateFormatter()
+                formatter.dateFormat = "HH:mm:ss"
 
+                locations.forEach { location in
+                    print("\(formatter.string(from: location.timestamp)) \(location.coordinate.latitude) \(location.coordinate.longitude)")
+                }
+                
                 let from = locations[1].coordinate
                 let to = locations[0].coordinate
 
                 if locations.count == 2 {
-                    self.animatePath(path: self.makePath(from: from, to: to, count: 300))
+                    self.animatePath(from: from, to: to)
                 } else if locations.count > 2 {
                     locations.remove(at: 0)
+                    //for i in 0..<10 {
+                    //    locations.remove(at: i)
+                    //}
                     locations.reversed().forEach { location in
-                        self.path?.add(location.coordinate)
+                        self.pathBehind?.add(location.coordinate)
                     }
-                    self.polyline?.path = self.path
+                    self.polylineBehind?.path = self.pathBehind
                     
                     let rotation = CLLocationDegrees(exactly: self.getHeadingForDirection(from: from, to: to))!
                     self.markerRotation = rotation + 90
-                    self.marker.rotation = self.markerRotation
+                    self.flightMarker.rotation = self.markerRotation
                     let cameraPosition = GMSCameraPosition(target: from, zoom: self.zoom)
                     self.mapView.googleMapView?.animate(to: cameraPosition)
 
-                    self.animatePath(path: self.makePath(from: from, to: to, count: 300))
+                    self.animatePath(from: from, to: to)
+                    self.trackingService.startTrack(flightId: self.flight.flightId)
                 }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-    }*/
+    }
     
     @objc func didUpdateLocation(_ notification: NSNotification) {
         guard let locations = notification.userInfo?["flightLocations"] as? [CLLocation],
@@ -159,7 +187,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
         //self.marker.position = from
         markerRotation = rotation + 90
         print("markerRotation: \(markerRotation)")
-        marker.rotation = markerRotation
+        flightMarker.rotation = markerRotation
         //self.marker.title = "\(dateFormatter.string(from: location.timestamp))"
         //self.marker.snippet = "\(location.coordinate.latitude), \(location.coordinate.longitude)"
         let cameraPosition = GMSCameraPosition(target: from, zoom: zoom)
@@ -186,7 +214,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
         
         self.pathBehind?.add(path.coordinate(at: index))
         self.polylineBehind?.path = self.pathBehind
-        self.marker.position = path.coordinate(at: index)
+        self.flightMarker.position = path.coordinate(at: index)
         
         pathAnimationTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] timer in
             index += 1
@@ -199,7 +227,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
                 self?.pathBehind?.add(coordinate)
                 //print("\(index): \(path.coordinate(at: index))")
                 self?.polylineBehind?.path = self?.pathBehind
-                self?.marker.position = path.coordinate(at: index)
+                self?.flightMarker.position = path.coordinate(at: index)
             } else {
                 timer.invalidate()
             }
@@ -252,7 +280,7 @@ class MapController: UIViewController, GMSMapViewDelegate {
         zoom = mapView.camera.zoom
         let bearing = mapView.camera.bearing
         //print("bearing: \(bearing)")
-        marker.rotation = markerRotation - bearing
+        flightMarker.rotation = markerRotation - bearing
         self.mapView.zoomLabel.text = "Zoom: \(zoom)"
     }
 }

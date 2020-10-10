@@ -20,8 +20,8 @@ class NetworkService {
     }()
     
     static func getAirports(completion: ((Swift.Result<[Airport], Error>) -> Void)? = nil) {
-        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150" //Иркутск
-        //let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/30.270505/59.799847/100" //Питер
+        //let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/104.287223/52.287521/150" //Иркутск
+        let baseUrl = "https://api.flightstats.com/flex/airports/rest/v1/json/withinRadius/30.270505/59.799847/100" //Питер
 
         let params: Parameters = [
             "appId": "59740609",
@@ -102,9 +102,18 @@ class NetworkService {
                 let positionsJSONs = json["flightTrack"]["positions"].arrayValue
                 //print(positionsJSONs)
                 let locations = positionsJSONs.map { position -> CLLocation in
-                        let location = CLLocation(
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" //"2020-10-01T01:35:00.000Z"
+                        let dateString = position["date"].stringValue
+                        let date = formatter.date(from: dateString) ?? Date()
+
+                        let coordinate = CLLocationCoordinate2D(
                         latitude: position["lat"].doubleValue,
                         longitude: position["lon"].doubleValue)
+                    
+                        let altitude = CLLocationDistance( position["altitudeFt"].doubleValue)
+                        
+                        let location = CLLocation(coordinate: coordinate, altitude: altitude, horizontalAccuracy: 0, verticalAccuracy: 0, timestamp: date)
                         return location
                 }
                 

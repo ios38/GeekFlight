@@ -12,8 +12,8 @@ import SnapKit
 
 class MapView: UIView {
     var googleMapView: GMSMapView?
-    //let coordinate = CLLocationCoordinate2D(latitude: 52.287521, longitude: 104.287223) //Иркутск
-    let coordinate = CLLocationCoordinate2D(latitude: 30.270505, longitude: 59.799847) //Питер
+    let coordinate = CLLocationCoordinate2D(latitude: 52.287521, longitude: 104.287223) //Иркутск
+    //let coordinate = CLLocationCoordinate2D(latitude: 30.270505, longitude: 59.799847) //Питер
 
     var startButton = UIButton(type: .system)
     var stopButton = UIButton(type: .system)
